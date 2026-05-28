@@ -1,0 +1,10 @@
+# ──────────────────────────────────────────────────────────
+# Namespace — Isolates all Trendz resources
+# ──────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trendz
+  labels:
+    app: trendz
+    managed-by: argocd

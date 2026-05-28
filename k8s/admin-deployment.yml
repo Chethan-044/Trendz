@@ -1,0 +1,49 @@
+# ──────────────────────────────────────────────────────────
+# Admin Deployment — React Admin Panel served via Nginx
+# ──────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trendz-admin
+  namespace: trendz
+  labels:
+    app: trendz
+    component: admin
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: trendz
+      component: admin
+  template:
+    metadata:
+      labels:
+        app: trendz
+        component: admin
+    spec:
+      containers:
+        - name: admin
+          image: YOUR_AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/trendz-admin:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      restartPolicy: Always

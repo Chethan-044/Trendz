@@ -1,0 +1,45 @@
+# ──────────────────────────────────────────────────────────
+# ArgoCD Application — GitOps deployment for Trendz
+# ──────────────────────────────────────────────────────────
+# This tells ArgoCD to watch the k8s/ directory in your
+# GitHub repo and auto-sync changes to the EKS cluster.
+# ──────────────────────────────────────────────────────────
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: trendz-full-stack
+  namespace: argocd
+  labels:
+    app: trendz
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  # ── Source: Where to read K8s manifests from ─────────
+  source:
+    repoURL: https://github.com/Chethan-044/Trendz.git
+    targetRevision: main
+    path: k8s                          # Directory containing manifests
+
+  # ── Destination: Where to deploy ────────────────────
+  destination:
+    server: https://kubernetes.default.svc    # In-cluster (ArgoCD runs inside EKS)
+    namespace: trendz
+
+  # ── Sync Policy ─────────────────────────────────────
+  syncPolicy:
+    automated:
+      prune: true                      # Delete resources removed from Git
+      selfHeal: true                   # Revert manual cluster changes
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true           # Auto-create 'trendz' namespace
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

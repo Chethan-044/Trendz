@@ -1,0 +1,47 @@
+# ──────────────────────────────────────────────────────────
+# Ingress — Routes external traffic to services
+# Uses Nginx Ingress Controller
+# ──────────────────────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: trendz-ingress
+  namespace: trendz
+  labels:
+    app: trendz
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+spec:
+  ingressClassName: nginx
+  rules:
+    # ── Frontend (default — customer-facing store) ─────
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: trendz-frontend-service
+                port:
+                  number: 80
+
+          # ── API Backend ──────────────────────────────
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: trendz-backend-service
+                port:
+                  number: 4000
+
+          # ── Admin Panel ──────────────────────────────
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: trendz-admin-service
+                port:
+                  number: 80

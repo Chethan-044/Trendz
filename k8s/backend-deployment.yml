@@ -1,0 +1,52 @@
+# ──────────────────────────────────────────────────────────
+# Backend Deployment — Node.js Express API
+# ──────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trendz-backend
+  namespace: trendz
+  labels:
+    app: trendz
+    component: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: trendz
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: trendz
+        component: backend
+    spec:
+      containers:
+        - name: backend
+          image: YOUR_AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/trendz-backend:latest
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: trendz-backend-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 4000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 4000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+      restartPolicy: Always

@@ -8,12 +8,23 @@ const currency = 'inr'
 const deliveryCharge = 10
 
 // gateway initialize
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+let stripe = null;
+let razorpayInstance = null;
 
-const razorpayInstance = new razorpay({
-    key_id : process.env.RAZORPAY_KEY_ID,
-    key_secret : process.env.RAZORPAY_KEY_SECRET,
-})
+try {
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+} catch (e) {
+    console.warn("⚠️  Stripe not configured:", e.message);
+}
+
+try {
+    razorpayInstance = new razorpay({
+        key_id : process.env.RAZORPAY_KEY_ID,
+        key_secret : process.env.RAZORPAY_KEY_SECRET,
+    });
+} catch (e) {
+    console.warn("⚠️  Razorpay not configured:", e.message);
+}
 
 // Placing orders using COD Method
 const placeOrder = async (req,res) => {

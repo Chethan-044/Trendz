@@ -1,0 +1,20 @@
+# ──────────────────────────────────────────────────────────
+# Backend Service — Exposes the API within the cluster
+# ──────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: trendz-backend-service
+  namespace: trendz
+  labels:
+    app: trendz
+    component: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: trendz
+    component: backend
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
