@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: YOUR_AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/trendz-frontend:latest
+          image: 133375667688.dkr.ecr.us-east-1.amazonaws.com/trendz-frontend:6
           ports:
             - containerPort: 80
               protocol: TCP

@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: 133375667688.dkr.ecr.us-east-1.amazonaws.com/trendz-backend:latest
+          image: 133375667688.dkr.ecr.us-east-1.amazonaws.com/trendz-backend:6
           ports:
             - containerPort: 4000
               protocol: TCP
