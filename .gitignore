@@ -5,3 +5,7 @@
 # Node modules
 node_modules/
 */node_modules/
+
+# Kubernetes secrets (NEVER commit to public repo)
+secrets.yml
+secrets.yaml
