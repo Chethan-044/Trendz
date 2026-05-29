@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // ── AWS Configuration ─────────────────────────────────
-        AWS_ACCOUNT_ID  = 'YOUR_AWS_ACCOUNT_ID'          // TODO: Replace with your AWS Account ID
+        AWS_ACCOUNT_ID  = '133375667688'
         AWS_REGION      = 'us-east-1'
         ECR_REGISTRY    = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
